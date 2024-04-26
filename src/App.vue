@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import HomePage from '@/components/HomePage.vue'
+import AppHeader from "./components/AppHeader.vue";
 </script>
 
 <template>
-  <HomePage />
+  <AppHeader />
+  <router-view>
+  </router-view>
 </template>
