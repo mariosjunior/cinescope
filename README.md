@@ -56,7 +56,9 @@ O CineScope é um aplicativo web que permite aos usuários explorar e descobrir 
     VUE_APP_API_KEY=sua_chave_de_api_aqui
 ```
 
-Substitua `sua_chave_de_api_aqui` pela sua chave de API válida do TMDb. 5. Inicie o servidor de desenvolvimento:
+Substitua `sua_chave_de_api_aqui` pela sua chave de API válida do TMDb. 
+
+5. Inicie o servidor de desenvolvimento:
 
 ```sh
  npm run serve
