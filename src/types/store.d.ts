@@ -4,5 +4,7 @@ export interface State {
         results: any
         total_pages: number
         total_results: number
-    } | null;
+    } | null,
+    currentPage: number
+    ;
 }
