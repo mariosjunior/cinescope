@@ -1,10 +1,18 @@
 export interface State {
-    data: {
-        page: number
-        results: any
-        total_pages: number
-        total_results: number
-    } | null,
+    data: ApiResponse | null,
     currentPage: number
     ;
+}
+
+export interface Movie {
+    id: number;
+    title: string;
+    overview: string;
+}
+
+export interface ApiResponse {
+    page: number;
+    results: Movie[];
+    total_pages: number;
+    total_results: number;
 }
