@@ -30,10 +30,12 @@ store.dispatch('fetchData');
 <template>
   <div>
     <div v-if="data">
-      <div v-for="movie in data.results" :key="movie.id">
-        <MovieCard :title="movie.title" :overview="movie.overview" :poster="movie.poster_path" />
+      <div class="movie-grid">
+        <MovieCard v-for="movie in data.results" :key="movie.id" :title="movie.title" :overview="movie.overview"
+          :poster="movie.poster_path" :popularity="movie.popularity" :voteAverage="movie.vote_average"
+          :voteCount="movie.vote_count" />
       </div>
-      <div>
+      <div class="pagination">
         <button @click="prevPage" :disabled="currentPage === 1">Anterior</button>
         <span>Página {{ currentPage }}</span>
         <button @click="nextPage" :disabled="currentPage === data.total_pages">Próxima</button>
@@ -41,3 +43,22 @@ store.dispatch('fetchData');
     </div>
   </div>
 </template>
+
+<style scoped>
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 20px;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  margin: 0 10px;
+}
+</style>
