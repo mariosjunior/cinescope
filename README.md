@@ -33,16 +33,34 @@ O CineScope é um aplicativo web que permite aos usuários explorar e descobrir 
 ### Passos
 
 1. Clone este repositório para o seu computador:
-   git clone https://github.com/seu-usuario/cinescope.git
+
+```sh
+     git clone https://github.com/seu-usuario/cinescope.git
+```
+
 2. Navegue até o diretório do projeto:
-   cd cinescope
+
+```sh
+    cd cinescope
+```
+
 3. Instale as dependências do projeto:
-   npm install
+
+```sh
+    npm install
+```
+
 4. Crie um arquivo `.env` na raiz do projeto e adicione a sua chave de API do TMDb:
-   VUE_APP_API_KEY=sua_chave_de_api_aqui
-   Substitua `sua_chave_de_api_aqui` pela sua chave de API válida do TMDb.
-5. Inicie o servidor de desenvolvimento:
-   npm run serve
+
+```sh
+    VUE_APP_API_KEY=sua_chave_de_api_aqui
+```
+
+Substitua `sua_chave_de_api_aqui` pela sua chave de API válida do TMDb. 5. Inicie o servidor de desenvolvimento:
+
+```sh
+ npm run serve
+```
 
 ## Licença
 
