@@ -12,7 +12,7 @@
                 </li>
                 <li>
                     <router-link to="/favorites" exact-active-class="active">
-                        Meus Favoritos
+                        My Favorites
                     </router-link>
                 </li>
             </ul>

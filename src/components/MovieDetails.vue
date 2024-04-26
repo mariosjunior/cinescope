@@ -6,26 +6,15 @@ import { State } from '@/types/store';
 const store = useStore<State>();
 const movie = computed(() => store.state.currentMovieDetails);
 const isVisible = ref(false);
-const isFavorite = ref(false);
 const isImageLoaded = ref(false);
 
-store.watch(
-    (state) => state.currentMovieDetails,
-    (newMovie) => {
-        isVisible.value = !!newMovie;
-        isFavorite.value = store.getters.isFavorite(newMovie?.id);
-        isImageLoaded.value = false;
-    }
-);
+const isFavorite = computed(() => {
+    return store.state.favorites.some((fav) => fav.id === movie.value?.id);
+});
 
 const toggleFavorite = () => {
     if (movie.value) {
-        if (isFavorite.value) {
-            store.dispatch('removeFromFavorites', movie.value.id);
-        } else {
-            store.dispatch('addToFavorites', movie.value);
-        }
-        isFavorite.value = !isFavorite.value;
+        store.dispatch('toggleFavorite', movie.value);
     }
 };
 

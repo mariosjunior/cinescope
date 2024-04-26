@@ -6,7 +6,8 @@ const storeOptions: StoreOptions<State> = {
     state: {
         data: null,
         currentPage: 1,
-        currentMovieDetails: null
+        currentMovieDetails: null,
+        favorites: [],
     },
     mutations: {
         setData(state: State, payload: ApiResponse) {
@@ -17,6 +18,17 @@ const storeOptions: StoreOptions<State> = {
         },
         setCurrentMovieDetails(state: State, details: MovieDetails) {
             state.currentMovieDetails = details;
+        },
+        toggleFavorite(state: State, movie: MovieDetails) {
+            const index = state.favorites.findIndex((fav) => fav.id === movie.id);
+            if (index !== -1) {
+                state.favorites.splice(index, 1);
+            } else {
+                state.favorites.push(movie);
+            }
+        },
+        clearFavorites(state: State) {
+            state.favorites = []
         }
     },
     actions: {
@@ -41,7 +53,13 @@ const storeOptions: StoreOptions<State> = {
             } catch (error) {
                 console.error('Error fetching movie details:', error);
             }
-        }
+        },
+        toggleFavorite({ commit }: ActionContext<State, State>, movie: MovieDetails) {
+            commit('toggleFavorite', movie);
+        },
+        clearFavorites({ commit }: ActionContext<State, State>) {
+            commit('clearFavorites');
+        },
     }
 };
 
