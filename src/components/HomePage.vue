@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "vuex";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { State } from "@/types/store";
 import MovieCard from "./MovieCard.vue";
 import MovieModal from "./MovieModal.vue";
@@ -38,31 +38,6 @@ const closeModal = () => {
   selectedMovie.value = null;
 };
 
-watch(showModal, (newValue) => {
-  if (newValue) {
-    document.body.classList.add('modal-open');
-    document.body.style.paddingRight = getScrollbarWidth() + 'px';
-  } else {
-    document.body.classList.remove('modal-open');
-    document.body.style.paddingRight = '';
-  }
-});
-
-const getScrollbarWidth = () => {
-  const outer = document.createElement('div');
-  outer.style.visibility = 'hidden';
-  outer.style.overflow = 'scroll';
-  document.body.appendChild(outer);
-
-  const inner = document.createElement('div');
-  outer.appendChild(inner);
-
-  const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
-  outer.parentNode?.removeChild(outer);
-
-  return scrollbarWidth;
-};
-
 store.dispatch("fetchData");
 </script>
 
@@ -72,7 +47,7 @@ store.dispatch("fetchData");
       <div class="movie-grid">
         <MovieCard v-for="movie in data.results" :key="movie.id" :title="movie.title" :overview="movie.overview"
           :poster="movie.poster_path" :popularity="movie.popularity" :voteAverage="movie.vote_average"
-          :voteCount="movie.vote_count" @click="showMovieDetails(movie.id)" />
+          :voteCount="movie.vote_count" :backCover="movie.backdrop_path" @click="showMovieDetails(movie.id)" />
       </div>
       <MovieModal :show="showModal" @close="closeModal" />
       <div class="pagination">
@@ -95,6 +70,12 @@ store.dispatch("fetchData");
   grid-gap: 20px;
 }
 
+@media screen and (min-width: 768px) {
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  }
+}
+
 .pagination {
   margin-top: 20px;
   display: flex;
@@ -104,11 +85,5 @@ store.dispatch("fetchData");
 
 .pagination button {
   margin: 0 10px;
-}
-</style>
-
-<style>
-body.modal-open {
-  overflow: hidden;
 }
 </style>

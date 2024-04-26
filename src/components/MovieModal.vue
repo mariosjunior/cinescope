@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import MovieDetails from './MovieDetails.vue';
-import { Icon } from '@iconify/vue'
+import { Icon } from '@iconify/vue';
+import { ref, onMounted } from 'vue';
 
 defineProps<{
     show: boolean;
 }>();
 
 const emit = defineEmits(['close']);
+
+const isMobile = ref(false);
+
+onMounted(() => {
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+});
+
+const checkIsMobile = () => {
+    isMobile.value = window.innerWidth < 600;
+};
 
 const closeModal = () => {
     emit('close');
@@ -15,9 +27,9 @@ const closeModal = () => {
 
 <template>
     <transition name="modal-fade">
-        <div v-if="show" class="modal">
+        <div v-if="show" class="modal" :class="{ 'modal-mobile': isMobile }">
             <div class="modal-overlay" @click="closeModal"></div>
-            <div class="modal-content">
+            <div class="modal-content" :class="{ 'modal-content-mobile': isMobile }">
                 <Icon class="close-icon" icon="ic:round-close" @click="closeModal" />
                 <MovieDetails />
             </div>
@@ -101,11 +113,15 @@ const closeModal = () => {
     }
 }
 
-@media (max-width: 600px) {
-    .modal-content {
-        width: 100%;
-        max-height: 100%;
-        border-radius: 0;
-    }
+.modal-mobile {
+    align-items: flex-start;
+}
+
+.modal-content-mobile {
+    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+    border-radius: 0;
 }
 </style>
