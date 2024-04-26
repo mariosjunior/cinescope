@@ -1,11 +1,12 @@
 import { createStore, StoreOptions, ActionContext } from 'vuex';
-import { State, ApiResponse } from '@/types/store';
+import { State, ApiResponse, MovieDetails } from '@/types/store';
 import axios from 'axios';
 
 const storeOptions: StoreOptions<State> = {
     state: {
         data: null,
-        currentPage: 1
+        currentPage: 1,
+        currentMovieDetails: null
     },
     mutations: {
         setData(state: State, payload: ApiResponse) {
@@ -13,6 +14,9 @@ const storeOptions: StoreOptions<State> = {
         },
         setCurrentPage(state: State, page: number) {
             state.currentPage = page;
+        },
+        setCurrentMovieDetails(state: State, details: MovieDetails) {
+            state.currentMovieDetails = details;
         }
     },
     actions: {
@@ -25,6 +29,17 @@ const storeOptions: StoreOptions<State> = {
                 commit('setData', response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
+            }
+        },
+        async fetchMovieDetails({ commit }: ActionContext<State, State>, movieId: number) {
+            const apiKey = '6d19860faa63c559a3149ba8759f5ef0';
+            const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`;
+
+            try {
+                const response = await axios.get(url);
+                commit('setCurrentMovieDetails', response.data);
+            } catch (error) {
+                console.error('Error fetching movie details:', error);
             }
         }
     }
