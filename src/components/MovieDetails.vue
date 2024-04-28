@@ -42,22 +42,25 @@ const formatRevenue = (revenue: number | undefined) => {
             </transition>
         </div>
         <div class="movie-info">
-            <h2>{{ movie?.title }}</h2>
+            <h2 data-test="movie-title">{{ movie?.title }}</h2>
             <div class="movie-genres">
                 <span class="genre-chip" v-for="genre in movie?.genres" :key="genre.id">{{ genre.name }}</span>
             </div>
             <div class="movie-meta">
-                <p><span class="meta-label">Release Date:</span> <span class="meta-value">{{ movie?.release_date }}</span>
+                <p><span class="meta-label">Release Date:</span> <span class="meta-value" data-test="release-date">{{
+                    movie?.release_date }}</span>
                 </p>
-                <p><span class="meta-label">Revenue:</span> <span class="meta-value">{{ formatRevenue(movie?.revenue)
+                <p><span class="meta-label">Revenue:</span> <span class="meta-value" data-test="revenue">{{
+                    formatRevenue(movie?.revenue)
                 }}</span></p>
             </div>
             <div>
                 <h3 class="meta-label">Overview:</h3>
-                <p>{{ movie?.overview }}</p>
+                <p data-test="overview">{{ movie?.overview }}</p>
             </div>
             <div class="favorite-button-container">
-                <button @click="toggleFavorite" class="favorite-button" :class="{ 'favorite': isFavorite }">
+                <button @click="toggleFavorite" class="favorite-button" :class="{ 'favorite': isFavorite }"
+                    data-test="favorite-button">
                     {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
                 </button>
             </div>
