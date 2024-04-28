@@ -31,11 +31,11 @@ store.dispatch("fetchData");
     <div v-if="data">
       <MovieList :movies="data.results" />
       <div class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1">
+        <button @click="prevPage" :disabled="currentPage === 1" aria-label="prev">
           Anterior
         </button>
         <span>Página {{ currentPage }}</span>
-        <button @click="nextPage" :disabled="currentPage === data.total_pages">
+        <button @click="nextPage" :disabled="currentPage === data.total_pages" aria-label="next">
           Próxima
         </button>
       </div>
