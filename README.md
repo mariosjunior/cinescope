@@ -35,7 +35,7 @@ O CineScope é um aplicativo web que permite aos usuários explorar e descobrir 
 1. Clone este repositório para o seu computador:
 
 ```sh
-     git clone https://github.com/seu-usuario/cinescope.git
+     git clone https://github.com/mariosjunior/cinescope.git
 ```
 
 2. Navegue até o diretório do projeto:
