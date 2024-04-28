@@ -13,6 +13,7 @@ O CineScope é um aplicativo web que permite aos usuários explorar e descobrir 
 - Adição de filmes aos favoritos
 - Listagem dos filmes favoritos
 - Layout responsivo para dispositivos móveis
+- Infinite Loading
 
 ## Tecnologias utilizadas
 
