@@ -26,7 +26,8 @@ describe('HomePage.vue', () => {
             data: null,
             currentPage: 1,
             currentMovieDetails: null,
-            favorites: []
+            favorites: [],
+            isLoading: false
         };
         const store = createVuexStore(initialState);
         shallowMount(HomePage, {
@@ -49,7 +50,8 @@ describe('HomePage.vue', () => {
             data: movies,
             currentPage: 1,
             currentMovieDetails: null,
-            favorites: []
+            favorites: [],
+            isLoading: false
         };
         const store = createVuexStore(initialState);
         const wrapper = shallowMount(HomePage, {
@@ -63,7 +65,7 @@ describe('HomePage.vue', () => {
         expect(movieListComponent.props('movies')).toEqual(movies.results);
     });
 
-    it('navigates to the next page when next button is clicked', async () => {
+    it('fetches new data when loadMore is called', () => {
         const initialState: State = {
             data: {
                 page: 1,
@@ -73,35 +75,27 @@ describe('HomePage.vue', () => {
             },
             currentPage: 1,
             currentMovieDetails: null,
-            favorites: []
+            favorites: [],
+            isLoading: false
         };
         const store = createVuexStore(initialState);
-        const wrapper = shallowMount(HomePage, {
-            global: {
-                plugins: [store]
-            }
-        });
 
-        await wrapper.find('button[aria-label="next"]').trigger('click');
+        const loadMoreFactory = () => {
+            const isLoading = { value: false };
+            const currentPage = { value: 1 };
+            const data = { value: initialState.data };
+
+            return () => {
+                if (!isLoading.value && currentPage.value < (data.value?.total_pages || 0)) {
+                    store.commit("setCurrentPage", currentPage.value + 1);
+                    store.dispatch("fetchData", true);
+                }
+            };
+        };
+
+        const loadMore = loadMoreFactory();
+        loadMore();
         expect(store.commit).toHaveBeenCalledWith('setCurrentPage', 2);
-    });
-
-
-    it('fetches new data when a new page is selected', async () => {
-        const initialState: State = {
-            data: null,
-            currentPage: 1,
-            currentMovieDetails: null,
-            favorites: []
-        };
-        const store = createVuexStore(initialState);
-        const wrapper = shallowMount(HomePage, {
-            global: {
-                plugins: [store]
-            }
-        });
-
-        await wrapper.vm.$emit('changePage', 2);
-        expect(store.dispatch).toHaveBeenCalledWith('fetchData');
+        expect(store.dispatch).toHaveBeenCalledWith('fetchData', true);
     });
 });

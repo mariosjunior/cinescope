@@ -38,6 +38,7 @@ describe('MovieDetails.vue', () => {
                 backdrop_path: '/example.jpg',
             } as MovieDetails,
             favorites: [],
+            isLoading: false
         };
 
         store = createVuexStore(initialState);

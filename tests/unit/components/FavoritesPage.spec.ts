@@ -26,7 +26,8 @@ describe('FavoritesPage.vue', () => {
       data: null,
       currentPage: 1,
       currentMovieDetails: null,
-      favorites: [{ id: 1, title: 'Example Movie', genres: [{ id: 1, name: 'Action' }] } as MovieDetails]
+      favorites: [{ id: 1, title: 'Example Movie', genres: [{ id: 1, name: 'Action' }] } as MovieDetails],
+      isLoading: false
     };
 
     store = createVuexStore(initialState);

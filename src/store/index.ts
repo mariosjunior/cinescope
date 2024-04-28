@@ -45,7 +45,8 @@ const storeOptions: StoreOptions<State> = {
     },
     actions: {
         async fetchData({ commit, state }, append = false) {
-            const apiKey = '6d19860faa63c559a3149ba8759f5ef0';
+            const apiKey = import.meta.env.VITE_API_KEY;
+
             try {
                 commit("setLoading", true);
                 const response = await fetch(
@@ -64,7 +65,8 @@ const storeOptions: StoreOptions<State> = {
             }
         },
         async fetchMovieDetails({ commit }: ActionContext<State, State>, movieId: number) {
-            const apiKey = '6d19860faa63c559a3149ba8759f5ef0';
+            const apiKey = import.meta.env.VITE_API_KEY;
+
             const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`;
 
             try {

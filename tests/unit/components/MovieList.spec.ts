@@ -45,6 +45,7 @@ describe('MovieList.vue', () => {
             currentPage: 1,
             currentMovieDetails: null,
             favorites: [],
+            isLoading: false
         };
 
         fetchMovieDetailsMock = jest.fn();
@@ -174,6 +175,7 @@ describe('MovieList.vue', () => {
 
             const movieCard = wrapper.findComponent({ name: 'MovieCard' });
             expect(movieCard.props()).toEqual({
+                id: movie.id,
                 title: movie.title,
                 overview: movie.overview,
                 poster: movie.poster_path,
