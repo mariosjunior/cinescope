@@ -11,7 +11,7 @@ const storeOptions: StoreOptions<State> = {
     },
     mutations: {
         setData(state: State, payload: ApiResponse) {
-            state.data = payload;
+            state.data = payload
         },
         setCurrentPage(state: State, page: number) {
             state.currentPage = page;
@@ -28,7 +28,7 @@ const storeOptions: StoreOptions<State> = {
             }
         },
         clearFavorites(state: State) {
-            state.favorites = []
+            state.favorites = [];
         }
     },
     actions: {
