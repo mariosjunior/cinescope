@@ -1,12 +1,14 @@
 import { shallowMount, VueWrapper } from '@vue/test-utils';
 import { createStore, Store } from 'vuex';
-import { State, Movie } from '@/types/store';
+import { State, Movie, MovieDetails } from '@/types/store';
 import MovieList from '@/components/MovieList.vue';
 import { ComponentPublicInstance } from 'vue';
 
 interface MovieListInstance extends ComponentPublicInstance {
     selectedMovie: Movie | null;
     showModal: boolean;
+    showMovieDetails: (movieId: number) => void;
+    closeModal: () => void;
 }
 
 const createVuexStore = (initialState: State): Store<State> => {
@@ -20,8 +22,19 @@ const createVuexStore = (initialState: State): Store<State> => {
     return store;
 };
 
+const createTestMovie = (): Movie => ({
+    id: 1,
+    title: 'Movie 1',
+    overview: 'Overview 1',
+    poster_path: '/poster1.jpg',
+    popularity: 7.8,
+    vote_average: 7.5,
+    vote_count: 100,
+    backdrop_path: '/backdrop1.jpg',
+    release_date: '2012-12-12',
+});
+
 describe('MovieList.vue', () => {
-    let wrapper: VueWrapper;
     let store: Store<State>;
     let initialState: State;
     let fetchMovieDetailsMock: jest.Mock;
@@ -40,45 +53,8 @@ describe('MovieList.vue', () => {
         store.dispatch = fetchMovieDetailsMock;
     });
 
-    it('shows movie details when a movie card is clicked', async () => {
-        const movie: Movie = {
-            id: 1,
-            title: 'Movie 1',
-            overview: 'Overview 1',
-            poster_path: '/poster1.jpg',
-            popularity: 7.8,
-            vote_average: 7.5,
-            vote_count: 100,
-            backdrop_path: '/backdrop1.jpg',
-            release_date: '2012-12-12'
-        };
-
-        wrapper = shallowMount(MovieList, {
-            global: {
-                plugins: [store],
-            },
-            props: {
-                movies: [movie],
-            },
-        });
-
-        await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
-
-        expect(fetchMovieDetailsMock).toHaveBeenCalledWith('fetchMovieDetails', movie.id);
-        expect(wrapper.vm).toEqual(expect.objectContaining({
-            selectedMovie: store.state.currentMovieDetails,
-            showModal: true,
-        }));
-    });
-
-    it('renders the correct number of movie cards', () => {
-        const movies: Movie[] = [
-            { id: 1, title: 'Movie 1', overview: 'Overview 1', poster_path: '/poster1.jpg', popularity: 7.8, vote_average: 7.5, vote_count: 100, backdrop_path: '/backdrop1.jpg', release_date: '2012-12-12' },
-            { id: 2, title: 'Movie 2', overview: 'Overview 2', poster_path: '/poster2.jpg', popularity: 8.1, vote_average: 7.8, vote_count: 150, backdrop_path: '/backdrop2.jpg', release_date: '2013-03-15' },
-            { id: 3, title: 'Movie 3', overview: 'Overview 3', poster_path: '/poster3.jpg', popularity: 6.9, vote_average: 6.7, vote_count: 80, backdrop_path: '/backdrop3.jpg', release_date: '2014-06-20' },
-        ];
-
-        wrapper = shallowMount(MovieList, {
+    const mountMovieList = (movies: Movie[]): VueWrapper => {
+        return shallowMount(MovieList, {
             global: {
                 plugins: [store],
             },
@@ -86,92 +62,126 @@ describe('MovieList.vue', () => {
                 movies,
             },
         });
+    };
 
-        const movieCards = wrapper.findAllComponents({ name: 'MovieCard' });
-        expect(movieCards).toHaveLength(movies.length);
-    });
+    describe('Movie card interactions', () => {
+        it('shows movie details when a movie card is clicked', async () => {
+            const movie = createTestMovie();
+            const wrapper = mountMovieList([movie]);
 
-    it('closes the modal when the close event is emitted', async () => {
-        const movie: Movie = {
-            id: 1,
-            title: 'Movie 1',
-            overview: 'Overview 1',
-            poster_path: '/poster1.jpg',
-            popularity: 7.8,
-            vote_average: 7.5,
-            vote_count: 100,
-            backdrop_path: '/backdrop1.jpg',
-            release_date: '2012-12-12',
-        };
+            await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
 
-        wrapper = shallowMount(MovieList, {
-            global: {
-                plugins: [store],
-            },
-            props: {
-                movies: [movie],
-            },
+            expect(fetchMovieDetailsMock).toHaveBeenCalledWith('fetchMovieDetails', movie.id);
+            expect(wrapper.vm).toEqual(expect.objectContaining({
+                selectedMovie: store.state.currentMovieDetails,
+                showModal: true,
+            }));
         });
 
-        await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
-        expect((wrapper.vm as MovieListInstance).showModal).toBe(true);
+        it('calls showMovieDetails with the correct movie id when a movie card is clicked', async () => {
+            const movie = createTestMovie();
+            const wrapper = mountMovieList([movie]);
 
-        wrapper.findComponent({ name: 'MovieModal' }).vm.$emit('close');
-        expect((wrapper.vm as MovieListInstance).showModal).toBe(false);
-        expect((wrapper.vm as MovieListInstance).selectedMovie).toBeNull();
-    });
-
-    it('passes the correct props to the MovieModal component', async () => {
-        const movie: Movie = {
-            id: 1,
-            title: 'Movie 1',
-            overview: 'Overview 1',
-            poster_path: '/poster1.jpg',
-            popularity: 7.8,
-            vote_average: 7.5,
-            vote_count: 100,
-            backdrop_path: '/backdrop1.jpg',
-            release_date: '2012-12-12',
-        };
-
-        wrapper = shallowMount(MovieList, {
-            global: {
-                plugins: [store],
-            },
-            props: {
-                movies: [movie],
-            },
+            const showMovieDetailsSpy = jest.spyOn(wrapper.vm as MovieListInstance, 'showMovieDetails');
+            await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
+            expect(showMovieDetailsSpy).toHaveBeenCalledWith(movie.id);
         });
 
-        await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
-        const movieModal = wrapper.findComponent({ name: 'MovieModal' });
-        expect(movieModal.props('show')).toBe(true);
+        it('emits the click event with the correct movie id when a movie card is clicked', async () => {
+            const movie = createTestMovie();
+            const wrapper = mountMovieList([movie]);
+
+            const movieCard = wrapper.findComponent({ name: 'MovieCard' });
+            movieCard.vm.$emit('click', movie.id);
+            expect(movieCard.emitted('click')).toBeTruthy();
+            expect(movieCard.emitted('click')![0]).toEqual([movie.id]);
+        });
     });
 
-    it('passes the correct props to the MovieModal component', async () => {
-        const movie: Movie = {
-            id: 1,
-            title: 'Movie 1',
-            overview: 'Overview 1',
-            poster_path: '/poster1.jpg',
-            popularity: 7.8,
-            vote_average: 7.5,
-            vote_count: 100,
-            backdrop_path: '/backdrop1.jpg',
-            release_date: '2012-12-12',
-        };
+    describe('Movie modal interactions', () => {
+        it('closes the modal when the close event is emitted', async () => {
+            const movie = createTestMovie();
+            const wrapper = mountMovieList([movie]);
 
-        wrapper = shallowMount(MovieList, {
-            global: {
-                plugins: [store],
-            },
-            props: {
-                movies: [movie],
-            },
+            await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
+            expect((wrapper.vm as MovieListInstance).showModal).toBe(true);
+
+            wrapper.findComponent({ name: 'MovieModal' }).vm.$emit('close');
+            expect((wrapper.vm as MovieListInstance).showModal).toBe(false);
+            expect((wrapper.vm as MovieListInstance).selectedMovie).toBeNull();
         });
 
-        await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
-        const movieModal = wrapper.findComponent({ name: 'MovieModal' });
-        expect(movieModal.props('show')).toBe(true);
+        it('passes the correct props to the MovieModal component', async () => {
+            const movie = createTestMovie();
+            const wrapper = mountMovieList([movie]);
+
+            await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
+            const movieModal = wrapper.findComponent({ name: 'MovieModal' });
+            expect(movieModal.props('show')).toBe(true);
+        });
+
+        it('resets currentMovieDetails to null when the modal is closed', async () => {
+            const movie: MovieDetails = {
+                id: 1,
+                title: 'Movie 1',
+                overview: 'Overview 1',
+                poster_path: '/poster1.jpg',
+                popularity: 7.8,
+                vote_average: 7.5,
+                vote_count: 100,
+                backdrop_path: '/backdrop1.jpg',
+                release_date: '2012-12-12',
+                revenue: 3,
+                genres: [
+                    {
+                        id: 1,
+                        name: 'Action'
+                    }
+                ]
+            };
+
+            store.state.currentMovieDetails = movie;
+
+            const wrapper = mountMovieList([movie]);
+
+            await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
+            expect(store.state.currentMovieDetails).not.toBeNull();
+
+            wrapper.findComponent({ name: 'MovieModal' }).vm.$emit('close');
+            expect(store.state.currentMovieDetails).toBeNull();
+        });
+    });
+
+    describe('Movie list rendering', () => {
+        it('renders the correct number of movie cards', () => {
+            const movies: Movie[] = [
+                createTestMovie(),
+                { ...createTestMovie(), id: 2, title: 'Movie 2' },
+                { ...createTestMovie(), id: 3, title: 'Movie 3' },
+            ];
+
+            const wrapper = mountMovieList(movies);
+
+            const movieCards = wrapper.findAllComponents({ name: 'MovieCard' });
+            expect(movieCards).toHaveLength(movies.length);
+        });
+
+        it('passes the correct movie props to MovieCard component', () => {
+            const movie = createTestMovie();
+            store.state.favorites = [movie];
+
+            const wrapper = mountMovieList([movie]);
+
+            const movieCard = wrapper.findComponent({ name: 'MovieCard' });
+            expect(movieCard.props()).toEqual({
+                title: movie.title,
+                overview: movie.overview,
+                poster: movie.poster_path,
+                popularity: movie.popularity,
+                voteAverage: movie.vote_average,
+                voteCount: movie.vote_count,
+                backCover: movie.backdrop_path,
+            });
+        });
     });
 });

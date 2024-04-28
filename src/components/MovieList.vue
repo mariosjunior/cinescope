@@ -24,6 +24,7 @@ const showMovieDetails = async (id: number) => {
 const closeModal = () => {
     showModal.value = false;
     selectedMovie.value = null;
+    store.state.currentMovieDetails = null;
 };
 </script>
 <template>
