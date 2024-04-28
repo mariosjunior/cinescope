@@ -22,6 +22,8 @@ O CineScope é um aplicativo web que permite aos usuários explorar e descobrir 
 - TypeScript
 - Axios
 - API do The Movie Database (TMDb)
+- Jest
+- Vue Test Utils
 
 ## Como executar o projeto localmente
 
@@ -50,18 +52,30 @@ O CineScope é um aplicativo web que permite aos usuários explorar e descobrir 
     npm install
 ```
 
-4. Crie um arquivo `.env` na raiz do projeto e adicione a sua chave de API do TMDb:
+4. Pegue sua chave API do TMDb:
+
+   
+   https://developer.themoviedb.org/docs
+   
+
+5. Crie um arquivo `.env` na raiz do projeto e adicione a sua chave de API do TMDb:
 
 ```sh
-    VUE_APP_API_KEY=sua_chave_de_api_aqui
+    VITE_API_KEY=sua_chave_de_api_aqui
 ```
 
 Substitua `sua_chave_de_api_aqui` pela sua chave de API válida do TMDb. 
 
-5. Inicie o servidor de desenvolvimento:
+6. Inicie o servidor de desenvolvimento:
 
 ```sh
- npm run serve
+ npm run dev
+```
+
+Para rodar os testes use:
+
+```sh
+ npm run test
 ```
 
 ## Licença
