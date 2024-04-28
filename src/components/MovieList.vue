@@ -30,9 +30,10 @@ const closeModal = () => {
 <template>
     <div>
         <div class="movie-grid">
-            <MovieCard v-for="movie in movies" :key="movie.id" :title="movie.title" :overview="movie.overview"
-                :poster="movie.poster_path" :popularity="movie.popularity" :voteAverage="movie.vote_average"
-                :voteCount="movie.vote_count" :backCover="movie.backdrop_path" @click="showMovieDetails(movie.id)" />
+            <MovieCard v-for="movie in movies" :key="movie.id" :id="movie.id" :title="movie.title"
+                :overview="movie.overview" :poster="movie.poster_path" :popularity="movie.popularity"
+                :voteAverage="movie.vote_average" :voteCount="movie.vote_count" :backCover="movie.backdrop_path"
+                @click="showMovieDetails(movie.id)" />
         </div>
         <MovieModal :show="showModal" @close="closeModal" />
     </div>

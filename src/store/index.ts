@@ -8,13 +8,25 @@ const storeOptions: StoreOptions<State> = {
         currentPage: 1,
         currentMovieDetails: null,
         favorites: [],
+        isLoading: false
     },
     mutations: {
         setData(state: State, payload: ApiResponse) {
             state.data = payload
         },
+        appendData(state, data) {
+            if (state.data) {
+                state.data.results = [...state.data.results, ...data.results];
+                state.data.total_pages = data.total_pages;
+            } else {
+                state.data = data;
+            }
+        },
         setCurrentPage(state: State, page: number) {
             state.currentPage = page;
+        },
+        setLoading(state, isLoading) {
+            state.isLoading = isLoading;
         },
         setCurrentMovieDetails(state: State, details: MovieDetails) {
             state.currentMovieDetails = details;
@@ -32,15 +44,23 @@ const storeOptions: StoreOptions<State> = {
         }
     },
     actions: {
-        async fetchData({ commit, state }: ActionContext<State, State>) {
+        async fetchData({ commit, state }, append = false) {
             const apiKey = '6d19860faa63c559a3149ba8759f5ef0';
-            const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=${state.currentPage}`;
-
             try {
-                const response = await axios.get(url);
-                commit('setData', response.data);
+                commit("setLoading", true);
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&page=${state.currentPage}`
+                );
+                const data = await response.json();
+                if (append) {
+                    commit("appendData", data);
+                } else {
+                    commit("setData", data);
+                }
+                commit("setLoading", false);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error("Erro ao buscar dados:", error);
+                commit("setLoading", false);
             }
         },
         async fetchMovieDetails({ commit }: ActionContext<State, State>, movieId: number) {
@@ -53,6 +73,11 @@ const storeOptions: StoreOptions<State> = {
             } catch (error) {
                 console.error('Error fetching movie details:', error);
             }
+        },
+        resetState({ commit }) {
+            commit("setData", null);
+            commit("setCurrentPage", 1);
+            commit("setLoading", false);
         },
         toggleFavorite({ commit }: ActionContext<State, State>, movie: MovieDetails) {
             commit('toggleFavorite', movie);

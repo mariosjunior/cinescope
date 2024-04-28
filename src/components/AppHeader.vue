@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const resetState = () => {
+    store.dispatch('resetState');
+};
+</script>
 <template>
     <header class="app-header">
         <div class="logo">
@@ -11,7 +20,7 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/favorites" exact-active-class="active">
+                    <router-link to="/favorites" exact-active-class="active" @click="resetState">
                         My Favorites
                     </router-link>
                 </li>

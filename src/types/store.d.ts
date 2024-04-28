@@ -2,7 +2,8 @@ export interface State {
     data: ApiResponse | null;
     currentPage: number;
     currentMovieDetails: MovieDetails | null;
-    favorites: Movie[]
+    favorites: Movie[];
+    isLoading: boolean
 }
 
 export interface Movie {

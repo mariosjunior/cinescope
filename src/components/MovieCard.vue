@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useStore } from 'vuex';
+import { MovieDetails } from '@/types/store';
 
 const props = defineProps({
+    id: Number,
     title: String,
     overview: String,
     poster: String,
@@ -13,6 +16,11 @@ const props = defineProps({
 });
 
 const isMobile = ref(false);
+const store = useStore();
+
+const isFavorite = computed(() => {
+    return store.state.favorites.some((fav: MovieDetails) => fav.id === props.id);
+});
 
 onMounted(() => {
     checkIsMobile();
@@ -56,7 +64,7 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
 </script>
 
 <template>
-    <div class="movie-card">
+    <div class="movie-card" :class="{ favorite: isFavorite }">
         <div class="movie-poster">
             <img :src="getImageUrl()" :alt="title" />
         </div>
@@ -115,6 +123,10 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
     backdrop-filter: blur(20px);
 }
 
+.movie-card.favorite {
+    box-shadow: 0 4px 12px #FF3162;
+}
+
 .movie-poster {
     flex: 0 0 auto;
     height: 200px;
@@ -137,7 +149,9 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
     padding: 16px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
+
 
 .movie-title {
     font-size: 20px;
@@ -159,7 +173,8 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
 .movie-info {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 8px;
     font-size: 14px;
     margin-top: auto;
 }

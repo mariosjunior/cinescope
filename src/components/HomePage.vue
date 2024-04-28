@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { State } from "@/types/store";
 import MovieList from './MovieList.vue';
 
@@ -8,20 +8,33 @@ const store = useStore<State>();
 
 const data = computed(() => store.state.data);
 const currentPage = computed(() => store.state.currentPage);
+const isLoading = computed(() => store.state.isLoading);
 
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    store.commit("setCurrentPage", currentPage.value - 1);
-    store.dispatch("fetchData");
-  }
-};
-
-const nextPage = () => {
-  if (currentPage.value < (data.value?.total_pages || 0)) {
+const loadMore = () => {
+  if (!isLoading.value && currentPage.value < (data.value?.total_pages || 0)) {
     store.commit("setCurrentPage", currentPage.value + 1);
-    store.dispatch("fetchData");
+    store.dispatch("fetchData", true);
   }
 };
+
+const handleScroll = () => {
+  const scrollTrigger = document.querySelector('.scroll-trigger');
+  if (scrollTrigger) {
+    const triggerTop = scrollTrigger.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+    if (triggerTop <= windowHeight) {
+      loadMore();
+    }
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 
 store.dispatch("fetchData");
 </script>
@@ -30,28 +43,13 @@ store.dispatch("fetchData");
   <div>
     <div v-if="data">
       <MovieList :movies="data.results" />
-      <div class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1" aria-label="prev">
-          Anterior
-        </button>
-        <span>Página {{ currentPage }}</span>
-        <button @click="nextPage" :disabled="currentPage === data.total_pages" aria-label="next">
-          Próxima
-        </button>
-      </div>
+      <div class="scroll-trigger"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.pagination button {
-  margin: 0 10px;
+.scroll-trigger {
+  height: 100px;
 }
 </style>
