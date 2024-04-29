@@ -1,3 +1,5 @@
+![CineScope](https://github.com/mariosjunior/cinescope/blob/master/cinescope.png?raw=true)
+
 # CineScope
 
 O CineScope é um aplicativo web que permite aos usuários explorar e descobrir filmes populares. Com o CineScope, você pode:
