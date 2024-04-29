@@ -186,4 +186,26 @@ describe('MovieList.vue', () => {
             });
         });
     });
+
+    it('resets showModal and selectedMovie when closeModal is called', () => {
+        const movie = createTestMovie();
+        const wrapper = mountMovieList([movie]);
+
+        (wrapper.vm as MovieListInstance).showModal = true;
+        (wrapper.vm as MovieListInstance).selectedMovie = movie;
+
+        (wrapper.vm as MovieListInstance).closeModal();
+
+        expect((wrapper.vm as MovieListInstance).showModal).toBe(false);
+        expect((wrapper.vm as MovieListInstance).selectedMovie).toBeNull();
+    });
+
+    it('calls showMovieDetails with the correct movie id when a movie card is clicked', async () => {
+        const movie = createTestMovie();
+        const wrapper = mountMovieList([movie]);
+
+        const showMovieDetailsSpy = jest.spyOn(wrapper.vm as MovieListInstance, 'showMovieDetails');
+        await wrapper.findComponent({ name: 'MovieCard' }).trigger('click');
+        expect(showMovieDetailsSpy).toHaveBeenCalledWith(movie.id);
+    });
 });

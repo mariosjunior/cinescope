@@ -11,6 +11,7 @@ describe('Vuex', () => {
                 currentPage: 1,
                 currentMovieDetails: null,
                 favorites: [],
+                isLoading: false
             },
             mutations: {
                 setData(state: State, payload: ApiResponse) {

@@ -16,7 +16,9 @@ const clearFavorites = () => {
 
 <template>
     <div class="favorites-page">
-        <button @click="clearFavorites" class="clear-button">Limpar Favoritos</button>
+        <div class="header">
+            <button @click="clearFavorites" class="clear-button">Clear Favorites</button>
+        </div>
         <div v-if="favoriteMovies?.length === 0" class="empty-state">
             <p>No favorite movies.</p>
         </div>
@@ -29,10 +31,20 @@ const clearFavorites = () => {
 <style scoped>
 .favorites-page {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
 }
 
 .clear-button {
-    margin-bottom: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 .empty-state {
