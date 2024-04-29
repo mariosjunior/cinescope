@@ -32,7 +32,7 @@ const resetState = () => {
 <style scoped>
 .app-header {
     background-color: #242424;
-    padding: 20px;
+    padding: 0 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
