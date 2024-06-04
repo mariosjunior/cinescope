@@ -30,13 +30,13 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  store.dispatch("fetchData");
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
 
-store.dispatch("fetchData");
 </script>
 
 <template>

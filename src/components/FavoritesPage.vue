@@ -45,6 +45,7 @@ const clearFavorites = () => {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
+    background-color: #475569;
 }
 
 .empty-state {

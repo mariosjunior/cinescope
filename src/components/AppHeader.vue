@@ -31,7 +31,7 @@ const resetState = () => {
   
 <style scoped>
 .app-header {
-    background-color: #242424;
+    background-color: #0F172A;
     padding: 0 0 20px;
     display: flex;
     justify-content: space-between;
@@ -39,13 +39,13 @@ const resetState = () => {
 }
 
 .logo h1 {
-    color: #FF3162;
+    color: #64ffda;
     font-size: 48px;
     font-weight: bold;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 nav ul {
@@ -75,8 +75,8 @@ nav a:hover {
 }
 
 nav a.active {
-    background-color: #FF3162;
-    color: #fff;
+    background-color: #64ffda;
+    color: #0F172A;
 }
 
 @media (max-width: 600px) {

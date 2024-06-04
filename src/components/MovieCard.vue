@@ -73,19 +73,21 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
             <p class="movie-overview">{{ truncateOverview(overview, 150) }}</p>
             <div class="movie-info">
                 <span class="info-item">
-                    <Icon class="icon" icon="mdi:fire" style="color: #ff3162" /> {{ formatPopularity(popularity) }}
+                    <span class="tooltip">Popularity</span>
+                    <Icon class="icon" icon="mdi:fire" style="color: #64ffda" /> {{ formatPopularity(popularity) }}
                 </span>
                 <span class="info-item">
-                    <Icon class="icon" icon="mdi:star" style="color: #ff3162" /> {{ formatVoteAverage(voteAverage) }}
+                    <span class="tooltip">Rating</span>
+                    <Icon class="icon" icon="mdi:star" style="color: #64ffda" /> {{ formatVoteAverage(voteAverage) }}
                 </span>
                 <span class="info-item">
-                    <Icon class="icon" icon="mdi:arrow-up-bold" style="color: #ff3162" /> {{ voteCount }}
+                    <span class="tooltip">Votes</span>
+                    <Icon class="icon" icon="mdi:arrow-up-bold" style="color: #64ffda" /> {{ voteCount }}
                 </span>
             </div>
         </div>
     </div>
 </template>
-
 <style scoped>
 .movie-card {
     display: flex;
@@ -102,7 +104,7 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
 
 .movie-card:hover {
     transform: scale(1.02);
-    box-shadow: 0 4px 12px #FF3162;
+    box-shadow: 0 4px 12px #64ffda;
     z-index: 1;
 }
 
@@ -124,7 +126,7 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
 }
 
 .movie-card.favorite {
-    box-shadow: 0 4px 12px #FF3162;
+    box-shadow: 0 4px 12px #64ffda;
 }
 
 .movie-poster {
@@ -151,7 +153,6 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
     flex-direction: column;
     align-items: center;
 }
-
 
 .movie-title {
     font-size: 20px;
@@ -186,12 +187,50 @@ const formatVoteAverage = (voteAverage: number | undefined) => {
     padding: 4px 8px 4px 8px;
     border-radius: 8px;
     margin-bottom: 8px;
+    position: relative;
+    /* Add this for tooltip positioning */
 }
 
 .icon {
     padding-right: 2px;
     width: 22px;
     height: 22px;
+}
+
+.tooltip {
+    visibility: hidden;
+    background-color: #334155;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    /* Position above the icon */
+    left: 50%;
+    margin-left: -50px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    width: 100px;
+    font-size: 12px;
+}
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #334155 transparent transparent transparent;
+}
+
+.info-item:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }
 
 @media screen and (min-width: 768px) {

@@ -14,7 +14,7 @@ const isFavorite = computed(() => {
 
 const toggleFavorite = () => {
     if (movie.value) {
-        store.dispatch('toggleFavorite', movie.value);
+        store.commit('toggleFavorite', movie.value);
     }
 };
 
@@ -89,7 +89,7 @@ const formatRevenue = (revenue: number | undefined) => {
 }
 
 .meta-label {
-    color: #ff3162;
+    color: #64ffda;
     font-weight: bold;
 }
 
@@ -99,12 +99,12 @@ const formatRevenue = (revenue: number | undefined) => {
 
 .genre-chip {
     display: inline-block;
-    color: #FF3162;
+    color: #64ffda;
     padding: 5px 10px;
     margin-right: 5px;
     margin-bottom: 5px;
-    background-color: #242424;
-    border: 1px solid #FF3162;
+    background-color: #0F172A;
+    border: 1px solid #64ffda;
     border-radius: 20px;
     font-size: 14px;
 }
@@ -125,7 +125,7 @@ const formatRevenue = (revenue: number | undefined) => {
 .movie-poster-placeholder {
     width: 100%;
     height: 100%;
-    background-color: #242424;
+    background-color: #0F172A;
     position: absolute;
     top: 0;
     left: 0;
@@ -135,7 +135,7 @@ const formatRevenue = (revenue: number | undefined) => {
     position: relative;
     max-width: 600px;
     border-radius: 8px 8px 0 0;
-    background-color: #242424;
+    background-color: #0F172A;
     overflow-y: auto;
     padding: 0 20px 0 20px;
     margin-top: -24px;
@@ -153,19 +153,21 @@ const formatRevenue = (revenue: number | undefined) => {
     padding: 8px 16px;
     font-size: 14px;
     color: #fff;
-    background-color: #242424;
-    border: 1px solid #FF3162;
+    background-color: #0F172A;
+    border: 1px solid #64ffda;
     border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .favorite-button:hover {
-    background-color: #FF3162;
+    background-color: #64ffda;
+    color: #0F172A
 }
 
 .favorite-button.favorite {
-    background-color: #FF3162;
+    background-color: #64ffda;
+    color: #0F172A;
 }
 
 .fade-enter-active,

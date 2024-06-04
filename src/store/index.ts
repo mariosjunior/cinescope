@@ -60,7 +60,7 @@ const storeOptions: StoreOptions<State> = {
                 }
                 commit("setLoading", false);
             } catch (error) {
-                console.error("Erro ao buscar dados:", error);
+                console.error("Error fetching data:", error);
                 commit("setLoading", false);
             }
         },
@@ -80,12 +80,6 @@ const storeOptions: StoreOptions<State> = {
             commit("setData", null);
             commit("setCurrentPage", 1);
             commit("setLoading", false);
-        },
-        toggleFavorite({ commit }: ActionContext<State, State>, movie: MovieDetails) {
-            commit('toggleFavorite', movie);
-        },
-        clearFavorites({ commit }: ActionContext<State, State>) {
-            commit('clearFavorites');
         },
     }
 };

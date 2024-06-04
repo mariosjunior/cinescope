@@ -66,7 +66,7 @@ const closeModal = () => {
 .modal-content {
     position: relative;
     z-index: 20;
-    background-color: #242424;
+    background-color: #0F172A;
     border-radius: 8px;
     max-width: 600px;
     width: 90%;
@@ -100,7 +100,7 @@ const closeModal = () => {
 }
 
 .close-icon:hover {
-    color: #FF3162;
+    color: #64ffda;
 }
 
 @keyframes blur-in {
